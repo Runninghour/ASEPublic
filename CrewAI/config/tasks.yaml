@@ -1,0 +1,56 @@
+planning_task:
+  description: >
+    Conduct a thorough research about the provided python repository
+    Make sure you find any interesting and relevant information and think of possibilities to
+    resolve the problem. Analyze the bug precisely and provide a reasonable solution strategy.
+    The goal is to fix the problem described below. Make sure the fix is minimal, touches only what is necessary, and directly addresses the issue causing test failures. Provide a clear step-by-step plan that includes:
+    - A brief summary of the root cause based on the description and context.
+    - A breakdown of the tasks required to resolve the issue.
+    - Which files or components will likely need to be modified.
+    - Any edge cases or test coverage concerns that should be kept in mind.
+    Your output should provide the Coder with an actionable blueprint to make precise changes to the codebase.
+    Problem description:
+    {problem_statement}
+  expected_output: >
+    A structured blueprint to fix the python programming issue
+  agent: planner
+
+coding_task:
+  description: >
+    Change the Repository Code based on the provided Blueprint in order to fix the Issue.
+    Analyze the Files to Change and make use of your file editing tools to make the necessary changes.
+    Be aware of any criticism and information received to provide an optimal result
+    **Task:**
+    Your job is to:
+    - Modify only the necessary files as described in the Planner’s task breakdown.
+    - Ensure all changes are minimal and scoped to what is strictly required to resolve the failing tests.
+    - Save all changes to the appropriate files so that they appear in the `git diff`.
+    - Follow good coding practices and maintain consistency with the surrounding code.
+    Do not make unrelated changes or refactor parts of the code not involved in this fix. Once changes are made, hand off the task to the Tester for validation.
+    Problem description:
+    {problem_statement}
+  expected_output: >
+    A fully fledged report with all the changes made to the local python repository
+  agent: coder
+
+testing_task:
+  description: >
+    Based on the received coding change report: Analyze the provided changes and criticize them.
+    Only Contribute Suggestions to improve the code.
+    **Task:**
+    Your tasks include:
+    - Running the full test suite, especially the tests related to the problem described.
+    - Confirming whether the bug or failure described is now resolved.
+    - Checking that no new test failures have been introduced.
+    - Optionally inspecting the `git diff` to ensure only the necessary code has been changed.
+    IF you identify 1-2 *clear and actionable* ways the code could be improved:
+    Provide these specific suggestions concisely. Output *only* the critique text.
+    ELSE IF the code is good, fixes the issue, and has no glaring errors or obvious omissions:
+    Respond *exactly* with the phrase "EXECUTION COMPLETED" and nothing else. It doesn't need to be perfect, just functionally complete for this stage. Avoid suggesting purely subjective stylistic preferences.
+    Do not add explanations. Output only the critique OR the exact completion phrase.
+    If the issue persists or if other tests break as a result of the changes, clearly report this back so that the Coder can revise the implementation.
+    Problem description:
+    {problem_statement}
+  expected_output: >
+    A detailed Critique report containing all necessary changes that are still to be made.
+  agent: tester
