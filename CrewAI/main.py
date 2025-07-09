@@ -40,7 +40,7 @@ async def handle_task(index):
     load_dotenv()
     api_url = f"{API_URL}{index}"
     print(f"Fetching test case {index} from {api_url}...")
-    repo_dir = os.path.join("D:\\ProgrammingProjekts\\ASEPublic\\repos", f"repo_{index}")  # Use unique repo directory per task
+    repo_dir = os.path.join(os.environ.get("WORKSPACE_ROOT"), f"repo_{index}")  # Use unique repo directory per task
     start_dir = os.getcwd()  # Remember original working directory
     os.environ["REPO_NAME"] = f"repo_{index}"
 
@@ -71,7 +71,7 @@ async def handle_task(index):
         print(f"Cloning repository {repo_url} into {repo_dir}...")
         env = os.environ.copy()
         env["GIT_TERMINAL_PROMPT"] = "0"
-        if not os.path.isdir("D:\\ProgrammingProjekts\\ASEPublic\\repos"+ '\\' + os.environ.get('REPO_NAME', '')):
+        if not os.path.isdir(os.environ.get("WORKSPACE_ROOT")+ '\\' + os.environ.get('REPO_NAME', '')):
             subprocess.run(["git", "clone", repo_url, repo_dir], check=True, env=env)
 
         if checkout_part:
